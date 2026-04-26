@@ -2,3 +2,5 @@
 .vscode
 go.mod
 go.sum
+*.docx
+*.ext*
