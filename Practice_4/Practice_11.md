@@ -53,14 +53,14 @@ classDiagram
     }
 
     class TicketStatus {
-        <<enumeration>>
+        <<enum>>
         Waiting
         InProgress
         Completed
     }
 
     class UserRole {
-        <<enumeration>>
+        <<enum>>
         Employee
         Manager
     }
@@ -197,13 +197,33 @@ classDiagram
 
 ```mermaid
 graph TD;
-    A[Domain] -->|использует| C[Contracts]
-    B[Application] -->|использует| A[Domain]
-    B[Application] -->|использует| C[Contracts]
-    D[Infrastructure] -->|использует| A[Domain]
-    E[Integration] -->|использует| C[Contracts]
-    F[Presentation] -->|использует| B[Application]
-    G[Shared] -->|использует| B[Application]
+    subgraph Domain
+        Ticket
+        User
+        AuditEntry
+        TicketStatus
+        UserRole
+        ITicketRepository
+    end
+    subgraph Application
+        TicketService
+    end
+    subgraph Infrastructure
+        TicketRepository
+    end
+    subgraph Contracts
+        CreateTicketDto
+        TicketDto
+    end
+    subgraph Shared
+        Logger
+        Validator
+    end
+    Application --> Domain
+    Infrastructure --> Domain
+    Infrastructure --> Contracts
+    Application --> Contracts
+    Shared --> Application
 ```
 
 ---
@@ -239,12 +259,10 @@ graph TD;
 
 ```
 /src
-    /Domain
     /Application
-    /Contracts
+    /Domain
     /Infrastructure
-    /Integration
-    /Presentation
+    /Contracts
     /Shared
 /docs
 /tests
